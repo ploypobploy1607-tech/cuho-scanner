@@ -7,8 +7,8 @@
 <script>
 (function(){
   function load(src, ok, fail){var x=document.createElement('script');x.src=src;x.onload=ok;x.onerror=fail;document.head.appendChild(x);}
-  load('https://cdn.jsdelivr.net/npm/@zxing/browser@0.2.1/umd/index.min.js',function(){window.__ZXING_READY=true;},function(){
-    load('https://unpkg.com/@zxing/browser@0.2.1/umd/index.min.js',function(){window.__ZXING_READY=true;},function(){window.__ZXING_FAILED=true;});
+  load('https://cdn.jsdelivr.net/npm/@zxing/browser@0.2.1/umd/zxing-browser.min.js',function(){window.__ZXING_READY=true;},function(){
+    load('https://unpkg.com/@zxing/browser@0.2.1/umd/zxing-browser.min.js',function(){window.__ZXING_READY=true;},function(){window.__ZXING_FAILED=true;});
   });
 })();
 </script>
