@@ -311,6 +311,11 @@ video{
       onclick="finish()">
       ✅ จบออเดอร์
     </button>
+    <button
+  class="undo"
+  onclick="undoLatest()">
+  ↩️ ยกเลิกรายการล่าสุด
+</button>
 
   </div>
 
@@ -332,6 +337,94 @@ video{
    ===================================================== */
 
 const API='https://script.google.com/macros/s/AKfycbxfZ3buqcYAErHM6o9rzFZh0Y9MHf90sw9WjqRo34RdjXY6kRR1AQLLa0FY3NICtuOS/exec';
+  function undoLatest(){
+
+  if(!confirm(
+    '↩️ ยืนยันยกเลิกรายการขายล่าสุด?\n\n' +
+    'ระบบจะคืนสถานะรองเท้าคู่นั้นเป็น "คงเหลือ"'
+  )){
+    return;
+  }
+
+  msg('กำลังยกเลิกรายการล่าสุด...');
+
+  var callbackName =
+    'cuhoUndo_' + Date.now();
+
+  window[callbackName] = function(r){
+
+    try{
+
+      if(r && r.ok){
+
+        msg(
+          '↩️ ยกเลิกรายการล่าสุดเรียบร้อย\n' +
+          'Barcode: ' + (r.barcode || '-') +
+          '\nราคาขาย: ' + (r.price || 0) + ' บาท'
+        );
+
+        alert(
+          '↩️ ยกเลิกรายการเรียบร้อยแล้ว\n\n' +
+          'Barcode: ' + (r.barcode || '-') +
+          '\nสถานะคืนเป็น: คงเหลือ'
+        );
+
+      }else{
+
+        msg(
+          '❌ ' +
+          (r && r.message
+            ? r.message
+            : 'ยกเลิกรายการไม่สำเร็จ'),
+          true
+        );
+
+        alert(
+          '❌ ยกเลิกไม่สำเร็จ\n\n' +
+          (r && r.message
+            ? r.message
+            : 'ไม่ทราบสาเหตุ')
+        );
+
+      }
+
+    }finally{
+
+      delete window[callbackName];
+
+      if(script && script.parentNode){
+        script.parentNode.removeChild(script);
+      }
+
+    }
+
+  };
+
+  var script = document.createElement('script');
+
+  script.src =
+    API +
+    '?action=undo' +
+    '&callback=' +
+    encodeURIComponent(callbackName);
+
+  script.onerror = function(){
+
+    delete window[callbackName];
+
+    if(script.parentNode){
+      script.parentNode.removeChild(script);
+    }
+
+    msg('❌ เชื่อมต่อระบบไม่ได้', true);
+
+    alert('❌ เชื่อมต่อระบบไม่ได้');
+
+  };
+
+  document.body.appendChild(script);
+
+}
 
 
 /* =====================================================
