@@ -22,7 +22,7 @@
 <button class="danger" id="undoBtn" onclick="undoStock()">↩️ ยกเลิกรับเข้ารายการล่าสุด</button>
 </div></div>
 <script>
-const API='https://script.google.com/macros/s/AKfycbxfZ3buqcYAErHM6o9rzFZh0Y9MHf90sw9Wj9qRo34RdjyX6kRR1AQLLa0FY3NICtu0S/exec';
+const API='https://script.google.com/macros/s/AKfycbyNeV3Nlw_KhXME2qdSA8sEz5LcVB0P1jaDeA6wDB_14bUT2vFxwLIujXuO2CujfeILLw/exec';
 let reader=null,controls=null,scanning=false,lastScan='';
 function msg(t,c){const e=document.getElementById('status');e.className='status '+(c||'');e.textContent=t;e.style.display='block'}
 function jsonp(action,params={}){return new Promise((resolve,reject)=>{const cb='cuho_stock_'+Date.now()+'_'+Math.floor(Math.random()*9999),s=document.createElement('script');const q=new URLSearchParams({action,callback:cb,...params});let done=false;const cleanup=()=>{if(done)return;done=true;clearTimeout(tm);delete window[cb];s.remove()};const tm=setTimeout(()=>{cleanup();reject(Error('หมดเวลาติดต่อระบบ — ตรวจสอบ Web App ของ Apps Script'))},15000);window[cb]=d=>{cleanup();resolve(d)};s.onerror=()=>{cleanup();reject(Error('เชื่อมต่อระบบไม่สำเร็จ — ตรวจสอบ Web App URL/สิทธิ์ Anyone'))};s.src=API+'?'+q.toString();document.body.appendChild(s)})}
