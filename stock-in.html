@@ -1,58 +1,35 @@
-<!DOCTYPE html>
-<html lang="th">
-<head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width,initial-scale=1">
-<title>CUHO SHOP - รับสินค้าเข้า</title>
+<!doctype html><html lang="th"><head>
+<meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<title>CUHO SHOP — รับสินค้าเข้า</title>
 <script src="https://cdn.jsdelivr.net/npm/@zxing/browser@0.2.1/umd/zxing-browser.min.js"></script>
 <style>
-body{font-family:Arial,sans-serif;background:#f5f5f5;margin:0;padding:16px;color:#222}
-.wrap{max-width:520px;margin:auto}.card{background:#fff;border-radius:16px;padding:16px;margin-bottom:12px}
-h2{margin:0 0 5px}.sub{color:#777;font-size:13px;margin-bottom:15px}
-label{display:block;font-weight:bold;margin:12px 0 6px}
-input,select,button{width:100%;box-sizing:border-box;padding:13px;border-radius:10px;font-size:16px}
-input,select{border:1px solid #ccc;background:#fff}
-button{border:0;margin-top:9px;font-weight:bold}.primary{background:#111;color:#fff}.secondary{background:#eee}.danger{background:#ffe5e5;color:#900}
-#reader{display:none;width:100%;overflow:hidden;border-radius:12px;background:#111;margin-top:10px}#reader video{width:100%}
-.status{display:none;padding:12px;border-radius:10px;margin-bottom:12px;white-space:pre-line}.ok{background:#e8f7e8;color:#176b27}.err{background:#ffe8e8;color:#a00000}.info{background:#eaf3ff;color:#075da8}
-#info{display:none;background:#f2f2f2;border-radius:10px;padding:10px;margin-top:10px}.small{font-size:12px;color:#777;margin-top:6px}
-.row{display:grid;grid-template-columns:1fr 1fr;gap:10px}
-</style>
-</head>
-<body>
-<div class="wrap">
-<h2>📦 CUHO SHOP</h2><div class="sub">รับสินค้าเข้า Products — มือถือ</div>
-<div id="status" class="status"></div>
+*{box-sizing:border-box}body{font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Arial,sans-serif;background:#f5f5f5;margin:0;padding:16px;color:#222}.wrap{max-width:520px;margin:auto}.card{background:#fff;border-radius:18px;padding:18px;margin-bottom:14px}h2{margin:0 0 5px}.sub{color:#777;margin-bottom:16px}label{display:block;font-weight:700;margin:13px 0 7px}input,select,button{width:100%;padding:14px;border-radius:12px;font-size:17px}input,select{border:1px solid #ccc;background:#fff}button{border:0;margin-top:10px;font-weight:700}.primary{background:#111;color:#fff}.secondary{background:#eee}.danger{background:#ffe5e5;color:#900}.status{display:none;padding:13px;border-radius:12px;margin-bottom:14px;white-space:pre-line}.ok{background:#e8f7e8;color:#176b27}.err{background:#ffe8e8;color:#a00000}.info{background:#eaf3ff;color:#075da8}.row{display:grid;grid-template-columns:1fr 1fr;gap:10px}#readerWrap{display:none;margin-top:12px;border-radius:14px;overflow:hidden;background:#111;position:relative}#reader{display:block;width:100%;min-height:260px;background:#111;object-fit:cover}#hint{position:absolute;left:12px;right:12px;bottom:12px;background:rgba(0,0,0,.65);color:#fff;padding:9px;border-radius:9px;text-align:center}#info{display:none;background:#f2f2f2;border-radius:12px;padding:12px;margin-top:10px}
+</style></head><body><div class="wrap">
+<h2>📦 CUHO SHOP</h2><div class="sub">รับสินค้าเข้า Products — มือถือ</div><div id="status" class="status"></div>
 <div class="card">
-<button class="primary" id="scan" onclick="startScan()">📷 สแกน Barcode ด้วยกล้อง</button>
-<video id="reader" playsinline></video>
-<button class="secondary" id="stop" onclick="stopScan()" style="display:none">⏹ หยุดสแกน</button>
-<label>Barcode</label>
-<input id="barcode" placeholder="เช่น CU000019" autocomplete="off">
-<button class="secondary" onclick="checkBarcode()">🔍 ตรวจสอบ Barcode</button>
-<div id="info"></div>
-</div>
+<button class="primary" id="scanBtn" onclick="startScan()">📷 สแกน Barcode ด้วยกล้อง</button>
+<div id="readerWrap"><video id="reader" playsinline autoplay muted></video><div id="hint">วาง Barcode ให้อยู่ในกรอบกล้อง</div></div>
+<button class="secondary" id="stopBtn" onclick="stopScan()" style="display:none">⏹ หยุดสแกน</button>
+<label>Barcode</label><input id="barcode" placeholder="เช่น CU000019" autocomplete="off" autocapitalize="characters">
+<button class="secondary" onclick="checkBarcode()">🔍 ตรวจสอบ Barcode</button><div id="info"></div></div>
 <div class="card">
-<label>ประเภทต้นทุน</label>
-<select id="type"><option>ปกติ</option><option>งานหัว</option></select>
-<div class="row"><div><label>แบรนด์</label><input id="brand" placeholder="Nike"></div>
-<div><label>ไซซ์</label><input id="size" placeholder="44"></div></div>
+<label>ประเภทต้นทุน</label><select id="type"><option value="ปกติ">ปกติ</option><option value="งานหัว">งานหัว</option></select>
+<div class="row"><div><label>แบรนด์</label><input id="brand" placeholder="Nike"></div><div><label>ไซซ์</label><input id="size" placeholder="44"></div></div>
 <label>ต้นทุนซื้อ / คู่</label><input id="cost" type="number" min="0" step=".01" placeholder="400">
-<label>จำนวน</label><input id="qty" type="number" value="1" min="1">
-<div class="small">ระบบกำหนด 1 Barcode = 1 คู่ จึงบันทึกได้เฉพาะจำนวน 1</div>
-<button class="primary" id="save" onclick="saveStock()">💾 รับสินค้าเข้า Products</button>
-<button class="danger" id="undo" onclick="undoStock()">↩️ ยกเลิกรับเข้ารายการล่าสุด</button>
+<label>จำนวน</label><input id="qty" type="number" value="1" readonly>
+<div style="font-size:12px;color:#777;margin-top:7px">1 Barcode = 1 คู่</div>
+<button class="primary" id="saveBtn" onclick="saveStock()">💾 รับสินค้าเข้า Products</button>
+<button class="danger" id="undoBtn" onclick="undoStock()">↩️ ยกเลิกรับเข้ารายการล่าสุด</button>
 </div></div>
 <script>
-const API='https://script.google.com/macros/s/AKfycbyIzgxvpMeW-e-qoBDKjuOtAX2NzEXYxAtyLYEu2gqFV3LTI3TFKbbJ4tim5qfbxSelJQ/exec';
-let reader=null,controls=null;
-function msg(t,c){let e=document.getElementById('status');e.className='status '+c;e.textContent=t;e.style.display='block'}
-function jsonp(action,params={}){return new Promise((resolve,reject)=>{let cb='cuho_'+Date.now();let s=document.createElement('script');let q=new URLSearchParams({action,callback:cb,...params});let tm=setTimeout(()=>{cleanup();reject(Error('หมดเวลาติดต่อระบบ'))},15000);window[cb]=d=>{cleanup();resolve(d)};s.onerror=()=>{cleanup();reject(Error('เชื่อมต่อระบบไม่สำเร็จ'))};function cleanup(){clearTimeout(tm);delete window[cb];s.remove()}s.src=API+'?'+q;s=document.body.appendChild(s)})}
-async function startScan(){document.getElementById('reader').style.display='block';document.getElementById('scan').style.display='none';document.getElementById('stop').style.display='block';try{reader=new ZXingBrowser.BrowserMultiFormatReader();let ds=await ZXingBrowser.BrowserCodeReader.listVideoInputDevices();if(!ds.length)throw Error('ไม่พบกล้อง');let d=ds.find(x=>/back|rear|environment/i.test(x.label))||ds[ds.length-1];controls=await reader.decodeFromVideoDevice(d.deviceId,'reader',(r)=>{if(r){document.getElementById('barcode').value=r.text.trim();stopScan();checkBarcode()}})}catch(e){stopScan();msg('เปิดกล้องไม่ได้\n'+e.message,'err')}}
-function stopScan(){if(controls){try{controls.stop()}catch(e){}controls=null}let v=document.querySelector('#reader video');if(v&&v.srcObject){v.srcObject.getTracks().forEach(t=>t.stop())}document.getElementById('reader').style.display='none';document.getElementById('scan').style.display='block';document.getElementById('stop').style.display='none'}
-async function checkBarcode(){let b=document.getElementById('barcode').value.trim();if(!b)return msg('กรุณาสแกนหรือกรอก Barcode','err');try{let r=await jsonp('stockCheck',{barcode:b});if(!r?.ok)return msg(r?.message||'ตรวจสอบไม่สำเร็จ','err');document.getElementById('info').style.display='block';document.getElementById('info').textContent='Barcode: '+r.barcode+' | สถานะ: '+(r.status||'พร้อมรับเข้า');if(r.exists)return msg('Barcode นี้มีอยู่ใน Products แล้ว','err');msg('Barcode นี้พร้อมรับสินค้าเข้า','ok')}catch(e){msg(e.message,'err')}}
-async function saveStock(){let b=document.getElementById('barcode').value.trim(),type=document.getElementById('type').value,brand=document.getElementById('brand').value.trim(),size=document.getElementById('size').value.trim(),cost=Number(document.getElementById('cost').value),qty=Number(document.getElementById('qty').value);if(!b)return msg('กรุณาสแกนหรือกรอก Barcode','err');if(!brand||!size)return msg('กรุณากรอกแบรนด์และไซซ์','err');if(!Number.isFinite(cost)||cost<0)return msg('กรุณากรอกต้นทุนให้ถูกต้อง','err');if(qty!==1)return msg('1 Barcode = 1 คู่ กรุณาใส่จำนวน 1','err');let btn=document.getElementById('save');btn.disabled=true;try{let r=await jsonp('stockSave',{barcode:b,type,brand,size,cost:String(cost),qty:'1'});if(!r?.ok)return msg(r?.message||'บันทึกไม่สำเร็จ','err');msg('✅ รับสินค้าเข้าสำเร็จ\nBarcode: '+r.barcode+'\nต้นทุน: '+Number(r.cost).toLocaleString()+' บาท','ok');['barcode','brand','size','cost'].forEach(id=>document.getElementById(id).value='');document.getElementById('qty').value=1;document.getElementById('info').style.display='none'}catch(e){msg(e.message,'err')}finally{btn.disabled=false}}
-async function undoStock(){if(!confirm('ยืนยันยกเลิกรับเข้าสินค้ารายการล่าสุด?'))return;let btn=document.getElementById('undo');btn.disabled=true;try{let r=await jsonp('stockUndo');if(!r?.ok)return msg(r?.message||'ยกเลิกไม่สำเร็จ','err');msg('↩️ ยกเลิกรับเข้าสำเร็จ\nBarcode: '+r.barcode,'ok')}catch(e){msg(e.message,'err')}finally{btn.disabled=false}}
-</script>
-</body>
-</html>
+const API='https://script.google.com/macros/s/AKfycbxfZ3buqcYAErHM6o9rzFZh0Y9MHf90sw9Wj9qRo34RdjyX6kRR1AQLLa0FY3NICtu0S/exec';
+let reader=null,controls=null,scanning=false,lastScan='';
+function msg(t,c){const e=document.getElementById('status');e.className='status '+(c||'');e.textContent=t;e.style.display='block'}
+function jsonp(action,params={}){return new Promise((resolve,reject)=>{const cb='cuho_stock_'+Date.now()+'_'+Math.floor(Math.random()*9999),s=document.createElement('script');const q=new URLSearchParams({action,callback:cb,...params});let done=false;const cleanup=()=>{if(done)return;done=true;clearTimeout(tm);delete window[cb];s.remove()};const tm=setTimeout(()=>{cleanup();reject(Error('หมดเวลาติดต่อระบบ — ตรวจสอบ Web App ของ Apps Script'))},15000);window[cb]=d=>{cleanup();resolve(d)};s.onerror=()=>{cleanup();reject(Error('เชื่อมต่อระบบไม่สำเร็จ — ตรวจสอบ Web App URL/สิทธิ์ Anyone'))};s.src=API+'?'+q.toString();document.body.appendChild(s)})}
+async function startScan(){if(scanning)return;document.getElementById('readerWrap').style.display='block';document.getElementById('scanBtn').style.display='none';document.getElementById('stopBtn').style.display='block';try{if(!navigator.mediaDevices?.getUserMedia)throw Error('เบราว์เซอร์ไม่อนุญาตให้ใช้กล้อง');reader=new ZXingBrowser.BrowserMultiFormatReader();const ds=await ZXingBrowser.BrowserCodeReader.listVideoInputDevices();if(!ds.length)throw Error('ไม่พบกล้อง');const d=ds.find(x=>/back|rear|environment/i.test(x.label))||ds[ds.length-1];scanning=true;lastScan='';controls=await reader.decodeFromVideoDevice(d.deviceId,document.getElementById('reader'),r=>{if(!r||!scanning)return;const text=String(r.text||'').trim().toUpperCase();if(!text||text===lastScan)return;lastScan=text;document.getElementById('barcode').value=text;stopScan();checkBarcode()});}catch(e){stopScan();msg('เปิดกล้องไม่ได้\n'+e.message,'err')}}
+function stopScan(){scanning=false;if(controls){try{controls.stop()}catch(e){}controls=null}const v=document.getElementById('reader');if(v?.srcObject){v.srcObject.getTracks().forEach(t=>{try{t.stop()}catch(e){}});v.srcObject=null}document.getElementById('readerWrap').style.display='none';document.getElementById('scanBtn').style.display='block';document.getElementById('stopBtn').style.display='none'}
+async function checkBarcode(){const b=document.getElementById('barcode').value.trim().toUpperCase();if(!b)return msg('กรุณาสแกนหรือกรอก Barcode','err');msg('กำลังตรวจสอบ Barcode...','info');try{const r=await jsonp('stockCheck',{barcode:b});if(!r?.ok)return msg(r?.message||'ตรวจสอบไม่สำเร็จ','err');const info=document.getElementById('info');info.style.display='block';if(r.exists){info.textContent='Barcode: '+r.barcode+' | สถานะ: '+(r.status||'มีอยู่แล้ว');return msg('❌ Barcode นี้มีอยู่ใน Products แล้ว — ป้องกันการรับซ้ำ','err')}info.textContent='Barcode: '+r.barcode+' | สถานะ: พร้อมรับเข้า';msg('✅ Barcode นี้พร้อมรับสินค้าเข้า','ok');document.getElementById('brand').focus()}catch(e){msg('❌ '+e.message,'err')}}
+async function saveStock(){const b=document.getElementById('barcode').value.trim().toUpperCase(),type=document.getElementById('type').value,brand=document.getElementById('brand').value.trim(),size=document.getElementById('size').value.trim(),cost=Number(document.getElementById('cost').value);if(!b)return msg('กรุณาสแกนหรือกรอก Barcode','err');if(!brand)return msg('กรุณากรอกแบรนด์','err');if(!size)return msg('กรุณากรอกไซซ์','err');if(!Number.isFinite(cost)||cost<0)return msg('กรุณากรอกต้นทุนให้ถูกต้อง','err');const btn=document.getElementById('saveBtn');btn.disabled=true;msg('กำลังบันทึกรับสินค้าเข้า...','info');try{const r=await jsonp('stockSave',{barcode:b,type,brand,size,cost:String(cost)});if(!r?.ok)return msg('❌ '+(r?.message||'บันทึกไม่สำเร็จ'),'err');msg('✅ รับสินค้าเข้าสำเร็จ\nBarcode: '+r.barcode+'\nต้นทุน: '+Number(r.cost||cost).toLocaleString()+' บาท','ok');['barcode','brand','size','cost'].forEach(id=>document.getElementById(id).value='');document.getElementById('type').value='ปกติ';document.getElementById('info').style.display='none';document.getElementById('barcode').focus()}catch(e){msg('❌ '+e.message,'err')}finally{btn.disabled=false}}
+async function undoStock(){if(!confirm('ยืนยันยกเลิกรับเข้าสินค้ารายการล่าสุด?'))return;const btn=document.getElementById('undoBtn');btn.disabled=true;msg('กำลังยกเลิกรายการล่าสุด...','info');try{const r=await jsonp('stockUndo');if(!r?.ok)return msg('❌ '+(r?.message||'ยกเลิกไม่สำเร็จ'),'err');msg('↩️ ยกเลิกรับเข้าสำเร็จ\nBarcode: '+r.barcode,'ok')}catch(e){msg('❌ '+e.message,'err')}finally{btn.disabled=false}}
+document.getElementById('barcode').addEventListener('keydown',e=>{if(e.key==='Enter')checkBarcode()});
+</script></body></html>
